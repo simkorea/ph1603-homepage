@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
             </table>
             <p style="margin-top:20px;color:#aaa;font-size:12px;">
               PH1603 프라이빗 오뜨 갤러리 ·
-              <a href="https://ph1603-sigma.vercel.app" style="color:#7c5c3a;">홈페이지 바로가기</a>
+              <a href="https://ph1603-homepage.vercel.app" style="color:#7c5c3a;">홈페이지 바로가기</a>
             </p>
           </div>
         `

@@ -1578,47 +1578,15 @@ async function submitConsultation(e) {
 }
 
 // ══════════════════════════════════════════
-//  네이버 광고 부정클릭 추적
-// ══════════════════════════════════════════
-(async function trackAdClick() {
-  const params = new URLSearchParams(window.location.search);
-  const NAVER_PARAMS = ['NaPm', 'nvadId', 'n_keyword', 'na_keyword', 'nclicks', 'n_media'];
-  const foundParam = NAVER_PARAMS.find(p => params.has(p));
-  if (!foundParam) return;
-
-  const LOG_KEY = 'ph1603_ad_log';
-  const now = Date.now();
-  const TEN_MIN = 10 * 60 * 1000;
-
-  let log = [];
-  try { log = JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch(e) {}
-  const recentVisits = log.filter(t => now - t < TEN_MIN);
-  const isSuspicious = recentVisits.length >= 2;
-
-  log.push(now);
-  if (log.length > 50) log = log.slice(-50);
-  localStorage.setItem(LOG_KEY, JSON.stringify(log));
-
-  try {
-    const ipRes = await fetch('https://api.ipify.org?format=json');
-    const { ip } = await ipRes.json();
-    await _sb.from('ad_clicks').insert({
-      ip_address: ip,
-      param: `ph1603|${foundParam}=${params.get(foundParam)}`,
-      user_agent: navigator.userAgent.substring(0, 500),
-      is_suspicious: isSuspicious
-    });
-  } catch(e) {
-    console.warn('[AdTrack] 기록 실패:', e);
-  }
-})();
-
-// ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initFadeUp, 300);
 });
 </script>
+
+<!-- 광고 부정클릭 추적 (adguard.js) -->
+<script>window.ADGUARD_SITE = 'PH1603';</script>
+<script src="./adguard.js" defer></script>
 </body>
 </html>
